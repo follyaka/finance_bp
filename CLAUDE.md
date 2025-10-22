@@ -16,21 +16,27 @@ Expert financial analysis and business planning agent generating professional-gr
 
 ---
 
-## Project Structure (Sector-Based Organization)
+## Project Structure (Sector-Based + Context Optimized)
 
 ```
 finance_bp/
-├── CLAUDE_CORE.md          ← This file (agent instructions)
+├── CLAUDE.md               ← This file (agent instructions)
 ├── README.md               ← Project overview
 │
 ├── esn_consulting/         ← ESN sector ✅ PRODUCTION
-│   ├── Budget_CA_2026_FINAL.xlsx
-│   ├── generate_budget.py
-│   ├── test_budget.py      ← MANDATORY automated tests
-│   ├── README.md           ← Sector-specific methodology
-│   ├── GUIDE_UTILISATION.md
-│   ├── METHODOLOGIE.md
-│   └── PROMPT_FINAL.md     ← Working prompt for reproducibility
+│   │
+│   ├── ✅ IN CONTEXT (for Claude prompting):
+│   ├── README.md           (151 lines, 1.1K tokens - metrics, formulas, benchmarks)
+│   ├── PROMPT_FINAL.md     (295 lines, 2.1K tokens - validated template)
+│   ├── generate_budget.py  (code - formulas source of truth)
+│   ├── test_budget.py      (validation - MANDATORY)
+│   │
+│   ├── ❌ EXCLUDED (.claudeignore - user docs):
+│   ├── GUIDE_UTILISATION.md (421 lines - user manual)
+│   ├── LIVRABLE.md          (516 lines - delivery report)
+│   ├── METHODOLOGIE.md      (381 lines - redundant verbose)
+│   │
+│   └── Budget_CA_2026_FINAL.xlsx (in Git, golden master)
 │
 └── [other_sectors]/        ← Future: saas/, restaurant/, retail/
     └── [same structure]
@@ -38,8 +44,87 @@ finance_bp/
 
 **Key Principles:**
 - One directory per sector (self-contained)
-- All historical versions in sector/old/ (EXCLUDED from context)
-- Clean root directory (only docs)
+- Agent docs IN context (README.md + PROMPT_FINAL.md + code)
+- User docs EXCLUDED (.claudeignore)
+- Historical versions in old/ (EXCLUDED from Git + context)
+- ~3K tokens per sector (vs 15K without optimization)
+
+---
+
+## Documentation Strategy (Context Optimization)
+
+**Principle:** Separate Agent Docs (in context) from User Docs (excluded)
+
+### Files IN Context (for Claude prompting)
+
+**sector/README.md (Essential)**
+- Sector-specific metrics (TJM, TACE, benchmarks)
+- Critical formulas (capacity, revenue, utilization)
+- Excel structure reference
+- ~100-150 lines, ~1K tokens
+- **WHY:** Core knowledge needed for generating accurate models
+
+**sector/PROMPT_FINAL.md (Validated Template)**
+- Complete user prompt that generated validated model
+- Excel mapping (cell references: B11, B13, Row 18, etc.)
+- Evolution history (V1→FINAL decisions)
+- Sector adaptation guide (ESN→SaaS template)
+- ~300 lines, ~2K tokens
+- **WHY:** Perfect reproducibility + sector template acceleration
+
+**sector/generate_budget.py (Code)**
+- Source of truth for formulas
+- Reference implementation
+
+**sector/test_budget.py (Validation)**
+- Automated formula checks
+- Structure validation
+
+### Files EXCLUDED from Context (.claudeignore)
+
+**sector/GUIDE_UTILISATION.md (User Manual)**
+- "How to modify yellow cells" instructions
+- User-facing step-by-step guide
+- NOT needed for Claude (generates file, doesn't use it)
+- ~400+ lines saved
+
+**sector/LIVRABLE.md (Delivery Report)**
+- "Mission Accomplished" client communication
+- Delivery summary
+- NOT needed for prompting
+- ~500+ lines saved
+
+**sector/METHODOLOGIE.md (Detailed Explanation)**
+- Verbose methodology explanations
+- Already condensed in README.md + CLAUDE.md
+- Redundant for context
+- ~400+ lines saved
+
+### .claudeignore Configuration
+
+**Purpose:** Exclude user-facing docs from Claude context to reduce token usage.
+
+**Add to .claudeignore:**
+```
+# User manuals (not for agent prompting)
+*/GUIDE_UTILISATION.md
+*/LIVRABLE.md
+*/METHODOLOGIE.md
+
+# Archives
+*/old/
+```
+
+**Result:**
+- Docs preserved in repo for users
+- Excluded from Claude context
+- ~12K tokens saved per sector
+
+**Trade-off:** +2.1K tokens for PROMPT_FINAL.md justified by:
+- ✅ Perfect reproducibility (exact prompt)
+- ✅ Template for new sectors (adaptation guide)
+- ✅ Knowledge preservation (decisions documented)
+- ✅ Strategic value > cost
 
 ---
 
@@ -280,6 +365,133 @@ See `README.md` and future `data/industry_benchmarks.json` for complete benchmar
 
 ---
 
+## PROMPT_FINAL.md Best Practices
+
+**Purpose:** Validated template for perfect reproducibility and sector adaptation.
+
+**MUST contain:**
+
+### 1. Complete User Prompt (50-60 lines)
+- Exact prompt that generated validated model
+- All parameters specified (Com1 01/01, Com2 01/01, Com3 01/03)
+- Zero ambiguity for reproduction
+
+**Example:**
+```markdown
+## Input Utilisateur (Prompt Original)
+
+Je veux créer un budget prévisionnel 2026 pour une société de conseil (ESN)
+avec une approche bottom-up.
+
+ÉQUIPE COMMERCIALE:
+- 3 commerciaux
+- Ramp-up progressif basé sur leur ancienneté individuelle:
+  * Mois 1 : 2 clients
+  * Mois 2 : 4 clients
+  [...]
+```
+
+### 2. Excel Mapping (30-40 lines)
+- Cell references: "B11, B13, B15: Dates d'entrée commerciaux"
+- Formula structure: "Row 18: TJM (=Hypothèses!$B$27)"
+- Critical calculations: "Row 34: CA RÉEL (=MIN(B23,B31))"
+
+**Example:**
+```markdown
+## Output Obtenu
+
+**Excel Mapping:**
+- Hypothèses: B11, B13, B15 (dates), B19-B22 (ramp-up)
+- CA: Row 8-10 (DATEDIF), Row 34 (MIN formula)
+- Formules: Row 18 (TJM), Row 19 (Durée), Row 20 (Montant = TJM × Durée)
+```
+
+### 3. Evolution History (20-30 lines)
+- V1→V2: Why this change (named ranges removed)
+- V2→V3: Why this fix (DATEDIF vs calendar)
+- Critical decisions documented
+
+**Example:**
+```markdown
+## Évolutions V1→FINAL
+
+V1→V2: Named ranges → Explicit references
+- Why: M&A/PE/TS transparency standards
+
+V2→V3: Calendar month → Individual DATEDIF
+- Why: Com3 enters March 1st, not January
+
+V3→FINAL: Added cumulative tracking
+- Why: YTD visibility requested
+```
+
+### 4. Sector Adaptation Guide (30-40 lines)
+- Template: ESN → SaaS conversion
+- Metric mapping: TJM → ARPU, TACE → Churn
+- Formula adaptation: CA = Missions × TJM → MRR = Customers × ARPU
+- Accelerates new sector development by 50%
+
+**Example:**
+```markdown
+## Guide Adaptation Autres Secteurs
+
+### ESN → SaaS:
+- **Metrics:**
+  * TJM (€1000) → ARPU ($100/mo)
+  * TACE (90%) → Churn Rate (5%/mo)
+  * Consultants → Customers
+  * Missions → Subscriptions
+
+- **Formulas:**
+  * CA Production = Consultants × Days × TACE × TJM
+  → MRR = Customers × (1 - Churn) × ARPU
+
+- **Structure:**
+  * Keep: Hypothèses tab, monthly tracking
+  * Add: Cohort analysis, NRR calculation
+  * Remove: DATEDIF (not applicable)
+```
+
+### WHY in context:
+
+✅ **Perfect reproducibility** (exact prompt)
+- Copy-paste template for identical results
+- No ambiguity on parameters
+
+✅ **Template for new sectors** (adaptation guide)
+- ESN→SaaS/Restaurant/Retail mapping
+- Accelerates development
+
+✅ **Knowledge preservation** (decisions documented)
+- Why these technical choices
+- Context for future iterations
+
+✅ **Cost justified:** +2K tokens for strategic value
+- Alternative: Recreate from scratch each time
+- ROI: Time saved > token cost
+
+**File structure example:**
+```markdown
+# PROMPT FINAL - Budget ESN 2026
+
+## Input Utilisateur (Prompt Original)
+[Complete prompt with all parameters]
+
+## Output Obtenu
+**Excel Mapping:**
+[Cell references and formula locations]
+
+## Évolutions V1→FINAL
+V1→V2: [Changes and rationale]
+V2→V3: [Changes and rationale]
+
+## Guide Adaptation Autres Secteurs
+ESN → SaaS: [Metric and formula mappings]
+ESN → Restaurant: [Metric and formula mappings]
+```
+
+---
+
 ## Quality Standards
 
 **Pre-Delivery Checklist:**
@@ -334,7 +546,8 @@ python test_budget.py Budget_FINAL.xlsx
 ❌ Two rows per entity (Ancienneté + Missions)
 ✅ One row per entity (DATEDIF calculates inline)
 
-See `esn_consulting/METHODOLOGIE.md` for detailed error documentation.
+See `esn_consulting/README.md` for sector-specific methodology.
+For detailed evolution history, refer to `esn_consulting/PROMPT_FINAL.md`.
 
 ---
 

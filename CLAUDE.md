@@ -24,20 +24,21 @@ finance_bp/
 ├── README.md               ← Project overview
 │
 ├── esn_consulting/         ← ESN sector ✅ PRODUCTION
-│   ├── README.md           (151 lines - metrics, formulas, benchmarks)
-│   ├── PROMPT_FINAL.md     (295 lines - validated template)
+│   ├── README.md           (~150 lines - metrics, formulas, benchmarks)
+│   ├── PROMPT_FINAL.md     (~205 lines - validated template, optimized)
+│   ├── METHODOLOGIE.md     (~150-200 lines - business logic)
 │   ├── generate_budget.py  (code - formulas source of truth)
 │   ├── test_budget.py      (validation - MANDATORY)
 │   └── Budget_CA_2026_FINAL.xlsx
 │
 └── [other_sectors]/        ← Future: saas/, restaurant/, retail/
-    └── [same structure - 5 files only]
+    └── [same structure - 6 files only]
 ```
 
 **Key Principles:**
 - One directory per sector (self-contained)
-- ONLY 5 files per sector (README, PROMPT_FINAL, code, tests, Excel)
-- NO user manuals (GUIDE_UTILISATION, LIVRABLE, METHODOLOGIE)
+- ONLY 6 files per sector (README, PROMPT_FINAL, METHODOLOGIE, code, tests, Excel)
+- NO user manuals (GUIDE_UTILISATION, LIVRABLE, README_TECHNIQUE)
 - Historical versions in old/ (EXCLUDED from Git)
 - Lean repo, professional standards
 
@@ -63,6 +64,15 @@ finance_bp/
 - Sector adaptation guide (ESN→SaaS template)
 - ~300 lines, ~2K tokens
 - **WHY:** Perfect reproducibility + sector template acceleration
+
+**sector/METHODOLOGIE.md (Business Logic - MANDATORY)**
+- Business approach (bottom-up, top-down, hybrid)
+- Revenue model and critical formulas
+- Technical decisions and rationale (DATEDIF, ROUNDUP, MIN)
+- Sector-specific calculations
+- Benchmarks and assumptions
+- ~150-200 lines, ~1.5K tokens
+- **WHY:** Documents business logic for prompt understanding and model validation
 
 **sector/generate_budget.py (Code - MANDATORY)**
 - Source of truth for formulas
@@ -92,10 +102,10 @@ finance_bp/
 - 500+ lines of marketing speak with no technical value
 - User already has the Excel file - that's the deliverable
 
-❌ **sector/METHODOLOGIE.md** (Verbose Explanation)
-- Reason: Everything important is in README.md (concise)
-- 400+ lines of redundant explanations
-- Creates maintenance burden (keeps docs in sync)
+❌ **sector/README_TECHNIQUE.md** (Redundant Documentation)
+- Reason: Duplicates README.md and METHODOLOGIE.md content
+- Creates maintenance burden (keeping 3 docs in sync)
+- Information should be in README.md (concise) or METHODOLOGIE.md (detailed)
 
 ❌ **sector/validate_budget.py** (Redundant Validator)
 - Reason: test_budget.py already does validation
@@ -115,29 +125,30 @@ When user requests a new sector budget, generate ONLY:
 
 ```
 sector/
-├── README.md              ✅ Generate (metrics, formulas, structure)
-├── PROMPT_FINAL.md        ✅ Generate (template, mapping, evolution)
-├── generate_budget.py     ✅ Generate (code)
-├── test_budget.py         ✅ Generate (MANDATORY tests)
-└── Budget_[Sector]_FINAL.xlsx  ✅ Generate (final output)
+├── README.md                    ✅ Generate (metrics, formulas, structure)
+├── PROMPT_FINAL.md              ✅ Generate (template, mapping, evolution)
+├── METHODOLOGIE.md              ✅ Generate (business logic, decisions, formulas)
+├── generate_budget.py           ✅ Generate (code)
+├── test_budget.py               ✅ Generate (MANDATORY tests)
+└── Budget_[Sector]_FINAL.xlsx   ✅ Generate (final output)
 
-Total: 5 files (~3K tokens in context)
+Total: 6 files (~4.5K tokens in context)
 ```
 
 **DO NOT create:**
-- ❌ GUIDE_UTILISATION.md (user manual)
-- ❌ LIVRABLE.md (delivery report)
-- ❌ METHODOLOGIE.md (verbose explanation)
-- ❌ README_TECHNIQUE.md (obsolete doc)
-- ❌ validate_budget.py (redundant)
-- ❌ show_summary.py (bloat display)
-- ❌ inspect_formulas.py (debug tool)
+- ❌ GUIDE_UTILISATION.md (user manual - Excel is self-explanatory)
+- ❌ LIVRABLE.md (delivery report - bloat marketing speak)
+- ❌ README_TECHNIQUE.md (redundant with README.md + METHODOLOGIE.md)
+- ❌ validate_budget.py (redundant with test_budget.py)
+- ❌ show_summary.py (bloat display script)
+- ❌ inspect_formulas.py (debug tool not needed in production)
 - ❌ Any other scripts or documentation files
 
 **Result:**
 - Lean repo (only essential files)
-- ~3K tokens per sector (vs 15K with bloat)
-- Less maintenance burden
+- ~4.5K tokens per sector (vs 15K with bloat)
+- METHODOLOGIE.md provides business logic context (useful for prompts)
+- Less maintenance burden than multiple redundant docs
 - Professional production standards
 
 ### ❌ DO NOT Create Report Files
@@ -149,6 +160,163 @@ Total: 5 files (~3K tokens in context)
 - ❌ Any automatic documentation of work done
 
 **Instead:** Just display output in terminal with echo/print. No files.
+
+---
+
+## METHODOLOGIE.md Pattern (Business Logic Documentation)
+
+**Purpose:** Document the business approach, formulas, and technical decisions for model reproducibility and prompt understanding.
+
+**MUST contain:**
+
+### 1. Global Approach (20-30 lines)
+```markdown
+# MÉTHODOLOGIE - Budget [Sector] [Year]
+
+## 1. Approche Globale
+
+### Méthode Choisie
+[Bottom-up / Top-down / Hybrid]
+
+**Rationale:** [Why this approach for this sector]
+
+### Workflow
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
+
+### Hypothèses Principales
+- [Key assumption 1]
+- [Key assumption 2]
+```
+
+### 2. Revenue Model (40-50 lines)
+```markdown
+## 2. Modèle de Revenus
+
+### Formule Principale
+```
+Revenue = [sector-specific formula]
+```
+
+**For ESN:**
+```
+CA_Réel = MIN(CA_Facturé_Commercial, CA_Production_MAX)
+CA_Facturé = Missions_Signées × TJM × Durée
+CA_Production_MAX = Nb_Consultants × Jours_Ouvrés × TACE × TJM
+```
+
+### Métriques Clés
+- **[Metric 1]**: [Definition, industry benchmark]
+- **[Metric 2]**: [Definition, industry benchmark]
+
+**For ESN:**
+- **TJM**: Taux Journalier Moyen (€500-€2000+)
+- **TACE**: Temps Absolu Consacré aux Études (90% typical)
+- **Taux Utilisation**: CA_Réel / CA_Production_MAX (75-85% target)
+```
+
+### 3. Critical Calculations (50-60 lines)
+```markdown
+## 3. Calculs Critiques
+
+### 3.1 [Calculation Name]
+**Formule:**
+```
+[Excel formula or mathematical expression]
+```
+
+**Excel Implementation:**
+- Location: Row X, Columns B:M
+- Formula: `=...`
+- Cell references: Hypothèses!$B$XX
+
+**Rationale:** [Why this formula]
+
+**For ESN - Ramp-up Commercial:**
+**Formule:**
+```
+Missions(month, salesperson) =
+  IF month < entry_date THEN 0
+  ELSE ramp_up_table[DATEDIF(entry_date, month, "M")]
+```
+
+**Excel Implementation:**
+- Location: Rows 8-10, Columns B:M
+- Formula: `=IF($B$5<Hypothèses!$B$11,0,IF(DATEDIF(Hypothèses!$B$11,$B$5,"M")=0,Hypothèses!$B$19,...))`
+- Uses DATEDIF for individual seniority (NOT calendar month)
+
+**Rationale:** Each salesperson has own entry date (Com3 starts March) → individual ramp-up based on seniority, not calendar month
+```
+
+### 4. Technical Decisions (30-40 lines)
+```markdown
+## 4. Décisions Techniques
+
+### 4.1 [Decision Topic]
+**Problem:** [What needed to be solved]
+**Options Considered:**
+- Option A: [pros/cons]
+- Option B: [pros/cons]
+
+**Solution Chosen:** [Option X]
+**Reason:** [Technical and business justification]
+
+**For ESN:**
+
+### 4.1 Ramp-up: DATEDIF vs Calendar Month
+**Problem:** Salespeople start on different dates (Com1 Jan 1, Com3 March 1)
+**Options:**
+- Calendar: All M1 in January, M2 in February
+- Individual: DATEDIF from entry date
+
+**Solution:** Individual DATEDIF
+**Reason:** Com3 in March should show M1 ramp-up (2 missions), not M3 (6 missions)
+
+### 4.2 Missions Signed: ROUNDUP vs ROUND
+**Problem:** Can't sign 7.3 missions
+**Solution:** ROUNDUP(value, 0)
+**Reason:** Conservative (rounds up) + realistic (integer missions)
+
+### 4.3 Real Revenue: MIN Formula
+**Problem:** Can't bill more than production capacity
+**Solution:** CA_Réel = MIN(CA_Facturé, CA_Production_MAX)
+**Reason:** Bottleneck = min(sales capacity, production capacity)
+```
+
+### 5. Benchmarks & Validation (20-30 lines)
+```markdown
+## 5. Benchmarks Sectoriels & Validation
+
+### Industry Standards
+- [Benchmark 1]: [Value] ([Source])
+- [Benchmark 2]: [Value] ([Source])
+
+### Model Validation
+- [Check 1]: [Expected range]
+- [Check 2]: [Expected range]
+
+**For ESN:**
+- TJM: €500-€2000+ (depends on expertise)
+- TACE: 85-95% (90% typical)
+- Utilization: 75-85% target
+- Sales ramp-up: 2→4→6→8 missions (conservative)
+
+### Reasonableness Checks
+- Year 1 utilization should be 50-70% (ramp-up)
+- Gross margin should be 45%+ (ESN standard)
+- CA/consultant should be €200-500K/year
+```
+
+### WHY Document This:
+
+✅ **Reproducibility**: Exact formulas and logic
+✅ **Prompt Context**: Helps LLM understand business decisions
+✅ **Validation**: Provides benchmarks for QA
+✅ **Knowledge Transfer**: Future sectors can adapt template
+✅ **Debugging**: When Excel results look wrong, reference methodology
+
+**File Size:** ~150-200 lines, ~1.5K tokens (justified by strategic value)
 
 ---
 
@@ -292,6 +460,179 @@ def validate_financials(filename):
 
     return True
 ```
+
+---
+
+## Test Pattern (test_budget.py) - MANDATORY
+
+**Purpose:** Automated validation of Excel formulas WITHOUT opening the file.
+
+**Structure (Reusable Template):**
+
+```python
+"""
+Automated test script for Budget [Sector] [Year]
+Validates formulas WITHOUT opening Excel
+"""
+
+import openpyxl
+import glob
+import os
+
+def test_budget():
+    """Complete automated test"""
+
+    # 1. Find most recent file
+    files = glob.glob("Budget_*_FINAL_*.xlsx")
+    if not files:
+        print("❌ ERROR: No file found!")
+        return False
+
+    files.sort(key=os.path.getmtime, reverse=True)
+    filename = files[0]
+
+    print(f"\n{'='*80}")
+    print(f"AUTOMATED TEST: {filename}")
+    print(f"{'='*80}\n")
+
+    # Load workbook (data_only=False to see formulas)
+    wb = openpyxl.load_workbook(filename, data_only=False)
+
+    errors = []
+    success = []
+
+    # 2. TEST: Structure (tabs exist)
+    print("TEST 1: Tab structure...")
+    required_tabs = ['Hypothèses', 'Chiffre d\'affaires']
+    for tab in required_tabs:
+        if tab in wb.sheetnames:
+            success.append(f"  ✓ Tab '{tab}' exists")
+        else:
+            errors.append(f"  ✗ Missing tab: {tab}")
+
+    ws_hypo = wb['Hypothèses']
+    ws_ca = wb['Chiffre d\'affaires']
+
+    # 3. TEST: Hypothèses inputs (values exist)
+    print("\nTEST 2: Hypothèses inputs...")
+    critical_inputs = [
+        ('B11', 'Com1 entry date'),
+        ('B27', 'TJM'),
+        ('B26', 'Mission duration'),
+        # Add sector-specific inputs
+    ]
+
+    for cell_ref, desc in critical_inputs:
+        if ws_hypo[cell_ref].value is not None:
+            success.append(f"  ✓ {cell_ref} ({desc}): {ws_hypo[cell_ref].value}")
+        else:
+            errors.append(f"  ✗ {cell_ref} ({desc}): EMPTY!")
+
+    # 4. TEST: Formula references (explicit, not hardcoded)
+    print("\nTEST 3: Formula references...")
+
+    # Example: B18 should be =Hypothèses!$B$27
+    formula_b18 = str(ws_ca['B18'].value)
+    if formula_b18 == '=Hypothèses!$B$27':
+        success.append(f"  ✓ B18: =Hypothèses!$B$27 (TJM)")
+    else:
+        errors.append(f"  ✗ B18: Wrong formula: {formula_b18}")
+
+    # Example: B19 should be =Hypothèses!$B$26
+    formula_b19 = str(ws_ca['B19'].value)
+    if formula_b19 == '=Hypothèses!$B$26':
+        success.append(f"  ✓ B19: =Hypothèses!$B$26 (Duration)")
+    else:
+        errors.append(f"  ✗ B19: Wrong formula: {formula_b19}")
+
+    # Example: B20 should reference B18*B19
+    formula_b20 = str(ws_ca['B20'].value)
+    if 'B18' in formula_b20 and 'B19' in formula_b20:
+        success.append(f"  ✓ B20: References B18*B19")
+    else:
+        errors.append(f"  ✗ B20: Missing B18*B19: {formula_b20}")
+
+    # 5. TEST: Critical calculations (sector-specific)
+    print("\nTEST 4: Critical formulas...")
+
+    # Example for ESN: Check DATEDIF in ramp-up
+    formula_b8 = str(ws_ca['B8'].value)
+    if 'DATEDIF' in formula_b8:
+        success.append(f"  ✓ B8: Uses DATEDIF (individual seniority)")
+    else:
+        errors.append(f"  ✗ B8: Missing DATEDIF!")
+
+    if 'Hypothèses!$B$11' in formula_b8:
+        success.append(f"  ✓ B8: References Com1 date (B11)")
+    else:
+        errors.append(f"  ✗ B8: Missing Com1 date reference!")
+
+    # Add sector-specific critical checks here
+
+    # 6. SUMMARY
+    print(f"\n{'='*80}")
+    print("TEST SUMMARY")
+    print(f"{'='*80}\n")
+
+    print(f"✅ SUCCESS ({len(success)}):")
+    for s in success[:10]:
+        print(s)
+    if len(success) > 10:
+        print(f"  ... and {len(success) - 10} more")
+
+    if errors:
+        print(f"\n❌ ERRORS ({len(errors)}):")
+        for e in errors:
+            print(e)
+        print(f"\n{'='*80}")
+        print("STATUS: ❌ FAILED - CORRECTIONS NEEDED")
+        print(f"{'='*80}\n")
+        return False
+    else:
+        print(f"\n{'='*80}")
+        print("STATUS: ✅ ALL TESTS PASSED")
+        print(f"{'='*80}\n")
+        print("File is ready for delivery!")
+        return True
+
+
+if __name__ == "__main__":
+    success = test_budget()
+    exit(0 if success else 1)
+```
+
+**Critical Test Categories:**
+
+1. **Structure Tests**
+   - Required tabs exist
+   - Required rows/columns present
+
+2. **Input Tests**
+   - All critical inputs have values (not None)
+   - Dates are valid datetime objects
+
+3. **Formula Tests (MOST IMPORTANT)**
+   - Formulas reference source cells (=Hypothèses!$B$27)
+   - NOT hardcoded values (NOT =1000)
+   - Correct cell references (B18, not B17)
+   - Contains expected functions (DATEDIF, ROUNDUP, MIN)
+
+4. **Calculation Tests**
+   - Critical formulas have correct structure
+   - References point to correct cells
+   - Sector-specific logic present
+
+**Usage:**
+
+```bash
+# Run tests BEFORE delivery (3-4 times if quality emphasized)
+cd esn_consulting/
+python test_budget.py
+
+# Exit code: 0 = success, 1 = failure
+```
+
+**MANDATORY:** Never deliver Excel without passing ALL tests!
 
 ### Phase 6: Delivery
 
@@ -624,4 +965,10 @@ This agent generates **professional, investor-ready business plans** with:
 ---
 
 *Last updated: 2025-10-22*
-*Version: OPTIMIZED (reduced from 2114 to ~450 lines - 79% reduction)*
+*Version: ULTRA-OPTIMIZED*
+*Changes:*
+*- Added METHODOLOGIE.md pattern (business logic documentation)*
+*- Added test_budget.py pattern (reusable test template)*
+*- Updated file generation rules (6 files: +METHODOLOGIE, -bloat)*
+*- Optimized PROMPT_FINAL.md (295→205 lines, -30%)*
+*- Total: 974 lines (vs 2114 original, -54% reduction)*

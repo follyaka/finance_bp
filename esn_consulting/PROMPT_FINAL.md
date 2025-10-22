@@ -110,78 +110,24 @@ QUALITÉ:
 
 ---
 
-### ✅ Structure Projet
-
-```
-finance_bp/
-├── CLAUDE.md (1619 lignes - instructions agent)
-├── README.md (guide projet)
-│
-└── esn_consulting/
-    ├── Budget_CA_2026_FINAL.xlsx          ← Fichier Excel validé
-    ├── generate_budget.py                 ← Générateur principal (version améliorée)
-    ├── test_budget.py                     ← Tests automatisés
-    ├── validate_budget.py                 ← Validation
-    ├── show_summary.py                    ← Affichage résumé
-    ├── inspect_formulas.py                ← Inspection formules
-    ├── README.md                          ← Guide ESN
-    ├── GUIDE_UTILISATION.md               ← Mode d'emploi détaillé
-    ├── METHODOLOGIE.md                    ← Méthodologie validée
-    ├── LIVRABLE.md                        ← Récapitulatif livraison
-    ├── README_TECHNIQUE.md                ← Documentation technique
-    ├── PROMPT_FINAL.md                    ← Ce fichier
-    │
-    └── old/                               ← Versions historiques
-        ├── Budget_CA_2026_20251021_165455.xlsx (V1)
-        ├── Budget_CA_2026_v2_20251021_172239.xlsx (V2)
-        ├── Budget_CA_2026_v3_20251021_174101.xlsx (V3)
-        ├── Budget_CA_2026_v4_FINAL_20251021_175816.xlsx (V4)
-        ├── Budget_CA_2026_v4_CORRECTED_20251021_180513.xlsx (V4 CORRECTED)
-        ├── Budget_CA_2026_FINAL_before_enhanced.xlsx (backup)
-        └── ... (générateurs et changelogs historiques)
-```
-
----
-
-### ✅ Documentation Complète
-
-**CLAUDE.md enrichi:**
-- 1619 lignes (+430 lignes de leçons apprises)
-- Section "CRITICAL LESSONS LEARNED" avec :
-  * ⚠️ Validation obligatoire avant livraison
-  * 🎯 5 erreurs critiques à éviter (documentées avec solutions)
-  * 📋 Template de script de test complet
-  * 🔄 Workflow correct : Génération → Tests → Livraison
-  * 💡 Pro tips et checklist qualité (10 points)
-- Section "Project Structure" avec organisation par secteur
-
-**Guides utilisateur:**
-- README.md (guide ESN spécifique)
-- GUIDE_UTILISATION.md (mode d'emploi complet)
-- METHODOLOGIE.md (approche mission-based validée)
-
----
-
 ### ✅ Validation & Tests
 
-**Tests automatisés passés (5/5):**
+**Tests automatisés passés (8/8):**
 ```
 ✓ B18 → Hypothèses!B27 (TJM)
 ✓ B19 → Hypothèses!B26 (Durée)
 ✓ B20 = B18*B19 (Montant)
-✓ Ramp-up Com1 avec DATEDIF et B11
-✓ Ramp-up Com3 avec DATEDIF et B15
-✓ CA cumulé YTD fonctionnel
-✓ CA mensuel moyen correct
-✓ Total missions signées correct
+✓ Ramp-up Com1 DATEDIF + B11
+✓ Ramp-up Com3 DATEDIF + B15
+✓ CA cumulé YTD
+✓ CA mensuel moyen
+✓ Total missions signées
 ```
 
-**Conformité standards M&A/PE/TS:**
-- ✓ Séparation inputs/calculs/outputs
-- ✓ Formules avec références explicites (=Hypothèses!$B$XX)
-- ✓ Audit trail complet et traçable
-- ✓ Formatage professionnel (couleurs, bordures)
-- ✓ Documentation des assumptions
+**Conformité M&A/PE/TS:**
+- ✓ Séparation inputs/formulas/outputs
+- ✓ Références explicites (=Hypothèses!$B$XX)
+- ✓ Audit trail traçable
 - ✓ Tests automatisés avant livraison
 
 ---
@@ -211,84 +157,50 @@ finance_bp/
 
 ---
 
-## 📊 Métriques Finales
-
-```
-Versions développées : 5 (V1 → V4 CORRECTED → ENHANCED)
-Erreurs corrigées : 12+ erreurs critiques
-Tests automatisés : 8 assertions validées
-Documentation : 2500+ lignes
-Temps de validation : <30 secondes (automatisé)
-Taux de réussite final : 100% (8/8 tests passés)
-```
-
----
-
-## 🎓 Leçons Clés Apprises
+## 🎓 Leçons Clés
 
 ### 1. Named Ranges vs Références Explicites
-❌ **Mauvais :** `=TJM` (cache la référence)
-✅ **Bon :** `=Hypothèses!$B$27` (transparent)
+❌ `=TJM` (cache référence) → ✅ `=Hypothèses!$B$27` (transparent)
 
 ### 2. Ramp-up par Ancienneté
-❌ **Mauvais :** Mois calendaire (janvier = M1 pour tous)
-✅ **Bon :** `DATEDIF(DateEntrée, MoisActuel, "M")` (ancienneté individuelle)
+❌ Mois calendaire → ✅ `DATEDIF(DateEntrée, MoisActuel, "M")`
 
-### 3. Indexation Lignes Excel
-❌ **Mauvais :** Row 18 = index 18 (erreur off-by-one)
-✅ **Bon :** Row 18 = index 17 (toujours index = row - 1)
+### 3. Indexation Excel
+❌ Row 18 = index 18 → ✅ Row 18 = index 17 (index = row - 1)
 
-### 4. Tests Automatisés Obligatoires
-❌ **Mauvais :** Livrer sans tester
-✅ **Bon :** `python test_budget.py` avant chaque livraison
+### 4. Tests Obligatoires
+❌ Livrer sans tester → ✅ `python test_budget.py` AVANT livraison
 
-### 5. Organisation par Secteur
-❌ **Mauvais :** Tous fichiers à la racine (désorganisé)
-✅ **Bon :** Un dossier par secteur (esn_consulting/, saas/, etc.)
+### 5. Organisation
+❌ Fichiers à la racine → ✅ Dossier par secteur (esn_consulting/, saas/)
 
 ---
 
-## 💡 Pour Réutiliser ce Prompt
+## 💡 Adaptation Autres Secteurs
 
-**Adapter pour un autre secteur (ex: SaaS) :**
+**ESN → SaaS :**
+- TJM (€1000) → ARPU ($100/mo)
+- TACE (90%) → Churn (5%/mo)
+- Missions → Subscriptions
+- CA = Missions × TJM → MRR = Customers × ARPU
 
-1. Remplacer les métriques ESN par métriques SaaS :
-   - TJM → ARPU (Average Revenue Per User)
-   - TACE → Churn Rate
-   - Ramp-up commerciaux → Customer acquisition funnel
+**ESN → Restaurant :**
+- TJM → Average Ticket
+- TACE → Table Turnover
+- Consultants → Tables/Seats
+- CA = Missions × TJM → Revenue = Covers × Avg Ticket
 
-2. Adapter les formules :
-   - CA = Missions × TJM → MRR = Customers × ARPU
-   - Capacité consultants → Server capacity / Customer success capacity
-
-3. Conserver les principes :
-   - ✓ Références explicites
-   - ✓ Tests automatisés
-   - ✓ Organisation par secteur
-   - ✓ Documentation complète
-
-**Commande pour générer :**
-```bash
-cd finance_bp/
-mkdir saas/
-# Adapter generate_budget.py pour SaaS
-# Créer test_budget.py spécifique SaaS
-# Documenter dans CLAUDE.md
-```
-
----
-
-## 📞 Support
-
-Pour toute question sur ce modèle :
-- Consulter [GUIDE_UTILISATION.md](GUIDE_UTILISATION.md)
-- Consulter [METHODOLOGIE.md](METHODOLOGIE.md)
-- Consulter [../CLAUDE.md](../CLAUDE.md) section "CRITICAL LESSONS LEARNED"
+**Principes conservés :**
+✓ Références explicites
+✓ Tests automatisés
+✓ Organisation par secteur
+✓ Documentation (README, PROMPT_FINAL, METHODOLOGIE)
 
 ---
 
 **Date de création :** 21 octobre 2025
+**Dernière mise à jour :** 22 octobre 2025
 **Statut :** ✅ Production Ready
-**Version :** ENHANCED (avec CA YTD + CA moyen + Total missions)
+**Version :** OPTIMIZED (réduit de 295 → 205 lignes, -30%)
 **Tests :** ✅ 8/8 passés
 **Conformité :** ✅ Standards M&A/PE/TS

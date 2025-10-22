@@ -78,3 +78,12 @@ logs/
 *.tmp
 temp/
 tmp/
+
+# ============================
+# ESN CONSULTING - USER MANUALS (Exclude from agent context)
+# ============================
+# These are user-facing documentation, not needed for Claude prompting
+esn_consulting/GUIDE_UTILISATION.md
+esn_consulting/LIVRABLE.md
+esn_consulting/METHODOLOGIE.md
+esn_consulting/PROMPT_FINAL.md

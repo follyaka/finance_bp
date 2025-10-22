@@ -82,8 +82,9 @@ tmp/
 # ============================
 # ESN CONSULTING - USER MANUALS (Exclude from agent context)
 # ============================
-# These are user-facing documentation, not needed for Claude prompting
+# User-facing documentation (not for Claude prompting)
 esn_consulting/GUIDE_UTILISATION.md
 esn_consulting/LIVRABLE.md
 esn_consulting/METHODOLOGIE.md
-esn_consulting/PROMPT_FINAL.md
+
+# PROMPT_FINAL.md is INCLUDED in context (validated template for reproducibility)

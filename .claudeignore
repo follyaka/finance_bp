@@ -1,0 +1,80 @@
+# Claude Code Context Exclusions
+# Ce fichier exclut les fichiers/dossiers du contexte Claude pour réduire la consommation de tokens
+
+# ============================
+# ARCHIVES (Critique: -40% tokens)
+# ============================
+*/old/
+old/
+*_ARCHIVE.*
+*_backup_*/
+
+# ============================
+# FICHIERS BINAIRES (Excel)
+# ============================
+*.xlsx
+*.xls
+# Exception: garder FINAL comme référence
+!*_FINAL.xlsx
+
+# ============================
+# TEMPLATES (charger à la demande)
+# ============================
+templates/
+
+# ============================
+# DATA FILES
+# ============================
+data/*.json
+
+# ============================
+# PYTHON ARTIFACTS
+# ============================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# ============================
+# IDE
+# ============================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ============================
+# OS
+# ============================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ============================
+# GIT
+# ============================
+.git/
+.gitignore
+.gitattributes
+
+# ============================
+# LOGS
+# ============================
+*.log
+logs/
+
+# ============================
+# TEMP FILES
+# ============================
+*.tmp
+temp/
+tmp/

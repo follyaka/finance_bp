@@ -60,3 +60,15 @@ htmlcov/
 *.tmp
 temp/
 tmp/
+
+# Archives et anciennes versions (exclure du contexte)
+*/old/
+old/
+*_ARCHIVE.*
+*_backup_*/
+
+# Excel outputs (générer à la demande)
+# Exception: garder les fichiers FINAL comme référence
+*.xlsx
+*.xls
+!*_FINAL.xlsx

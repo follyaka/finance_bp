@@ -16,7 +16,7 @@ Expert financial analysis and business planning agent generating professional-gr
 
 ---
 
-## Project Structure (Sector-Based + Context Optimized)
+## Project Structure (Sector-Based + Lean Production)
 
 ```
 finance_bp/
@@ -24,45 +24,37 @@ finance_bp/
 ├── README.md               ← Project overview
 │
 ├── esn_consulting/         ← ESN sector ✅ PRODUCTION
-│   │
-│   ├── ✅ IN CONTEXT (for Claude prompting):
-│   ├── README.md           (151 lines, 1.1K tokens - metrics, formulas, benchmarks)
-│   ├── PROMPT_FINAL.md     (295 lines, 2.1K tokens - validated template)
+│   ├── README.md           (151 lines - metrics, formulas, benchmarks)
+│   ├── PROMPT_FINAL.md     (295 lines - validated template)
 │   ├── generate_budget.py  (code - formulas source of truth)
 │   ├── test_budget.py      (validation - MANDATORY)
-│   │
-│   ├── ❌ EXCLUDED (.claudeignore - user docs):
-│   ├── GUIDE_UTILISATION.md (421 lines - user manual)
-│   ├── LIVRABLE.md          (516 lines - delivery report)
-│   ├── METHODOLOGIE.md      (381 lines - redundant verbose)
-│   │
-│   └── Budget_CA_2026_FINAL.xlsx (in Git, golden master)
+│   └── Budget_CA_2026_FINAL.xlsx
 │
 └── [other_sectors]/        ← Future: saas/, restaurant/, retail/
-    └── [same structure]
+    └── [same structure - 5 files only]
 ```
 
 **Key Principles:**
 - One directory per sector (self-contained)
-- Agent docs IN context (README.md + PROMPT_FINAL.md + code)
-- User docs EXCLUDED (.claudeignore)
-- Historical versions in old/ (EXCLUDED from Git + context)
-- ~3K tokens per sector (vs 15K without optimization)
+- ONLY 5 files per sector (README, PROMPT_FINAL, code, tests, Excel)
+- NO user manuals (GUIDE_UTILISATION, LIVRABLE, METHODOLOGIE)
+- Historical versions in old/ (EXCLUDED from Git)
+- Lean repo, professional standards
 
 ---
 
-## Documentation Strategy (Context Optimization)
+## Documentation Strategy (Lean Production)
 
-**Principle:** Separate Agent Docs (in context) from User Docs (excluded)
+**Principle:** Generate ONLY essential files. No user manuals. Keep repo lean.
 
-### Files IN Context (for Claude prompting)
+### Files TO GENERATE (Required)
 
 **sector/README.md (Essential)**
 - Sector-specific metrics (TJM, TACE, benchmarks)
 - Critical formulas (capacity, revenue, utilization)
 - Excel structure reference
 - ~100-150 lines, ~1K tokens
-- **WHY:** Core knowledge needed for generating accurate models
+- **WHY:** Core knowledge for generating accurate models
 
 **sector/PROMPT_FINAL.md (Validated Template)**
 - Complete user prompt that generated validated model
@@ -72,59 +64,91 @@ finance_bp/
 - ~300 lines, ~2K tokens
 - **WHY:** Perfect reproducibility + sector template acceleration
 
-**sector/generate_budget.py (Code)**
+**sector/generate_budget.py (Code - MANDATORY)**
 - Source of truth for formulas
 - Reference implementation
+- Generates Excel with xlsxwriter
 
-**sector/test_budget.py (Validation)**
-- Automated formula checks
+**sector/test_budget.py (Tests - MANDATORY)**
+- Automated formula checks with openpyxl
 - Structure validation
+- Run BEFORE delivery (3-4 times if quality emphasized)
 
-### Files EXCLUDED from Context (.claudeignore)
+**sector/Budget_[Sector]_FINAL.xlsx (Output)**
+- Final Excel model with dynamic formulas
+- Golden master in Git
 
-**sector/GUIDE_UTILISATION.md (User Manual)**
-- "How to modify yellow cells" instructions
-- User-facing step-by-step guide
-- NOT needed for Claude (generates file, doesn't use it)
-- ~400+ lines saved
+### Files to NEVER GENERATE ❌
 
-**sector/LIVRABLE.md (Delivery Report)**
-- "Mission Accomplished" client communication
-- Delivery summary
-- NOT needed for prompting
-- ~500+ lines saved
+**DO NOT create these files - they clutter the repo without value:**
 
-**sector/METHODOLOGIE.md (Detailed Explanation)**
-- Verbose methodology explanations
-- Already condensed in README.md + CLAUDE.md
-- Redundant for context
-- ~400+ lines saved
+❌ **sector/GUIDE_UTILISATION.md** (User Manual)
+- Reason: Excel is self-explanatory (yellow cells = inputs)
+- User doesn't need 400+ lines explaining how to modify cells
+- Wastes time generating content nobody reads
 
-### .claudeignore Configuration
+❌ **sector/LIVRABLE.md** (Delivery Report)
+- Reason: Useless "Mission Accomplished" fluff
+- 500+ lines of marketing speak with no technical value
+- User already has the Excel file - that's the deliverable
 
-**Purpose:** Exclude user-facing docs from Claude context to reduce token usage.
+❌ **sector/METHODOLOGIE.md** (Verbose Explanation)
+- Reason: Everything important is in README.md (concise)
+- 400+ lines of redundant explanations
+- Creates maintenance burden (keeps docs in sync)
 
-**Add to .claudeignore:**
+❌ **sector/validate_budget.py** (Redundant Validator)
+- Reason: test_budget.py already does validation
+- Duplicate functionality = maintenance burden
+
+❌ **sector/show_summary.py** (Fancy Display)
+- Reason: Bloat "Mission Accomplished" script
+- Just displays fancy summary - adds no value
+
+❌ **sector/inspect_formulas.py** (Debug Tool)
+- Reason: Debug utility not needed in production
+- test_budget.py already validates formulas
+
+### Standard Deliverable per Sector
+
+When user requests a new sector budget, generate ONLY:
+
 ```
-# User manuals (not for agent prompting)
-*/GUIDE_UTILISATION.md
-*/LIVRABLE.md
-*/METHODOLOGIE.md
+sector/
+├── README.md              ✅ Generate (metrics, formulas, structure)
+├── PROMPT_FINAL.md        ✅ Generate (template, mapping, evolution)
+├── generate_budget.py     ✅ Generate (code)
+├── test_budget.py         ✅ Generate (MANDATORY tests)
+└── Budget_[Sector]_FINAL.xlsx  ✅ Generate (final output)
 
-# Archives
-*/old/
+Total: 5 files (~3K tokens in context)
 ```
+
+**DO NOT create:**
+- ❌ GUIDE_UTILISATION.md (user manual)
+- ❌ LIVRABLE.md (delivery report)
+- ❌ METHODOLOGIE.md (verbose explanation)
+- ❌ README_TECHNIQUE.md (obsolete doc)
+- ❌ validate_budget.py (redundant)
+- ❌ show_summary.py (bloat display)
+- ❌ inspect_formulas.py (debug tool)
+- ❌ Any other scripts or documentation files
 
 **Result:**
-- Docs preserved in repo for users
-- Excluded from Claude context
-- ~12K tokens saved per sector
+- Lean repo (only essential files)
+- ~3K tokens per sector (vs 15K with bloat)
+- Less maintenance burden
+- Professional production standards
 
-**Trade-off:** +2.1K tokens for PROMPT_FINAL.md justified by:
-- ✅ Perfect reproducibility (exact prompt)
-- ✅ Template for new sectors (adaptation guide)
-- ✅ Knowledge preservation (decisions documented)
-- ✅ Strategic value > cost
+### ❌ DO NOT Create Report Files
+
+**NEVER generate these bloat files:**
+- ❌ Any *_REPORT.md or *_REPORT.txt files
+- ❌ Any *_SUMMARY.txt or *_SUMMARY.md files
+- ❌ Any *_CHANGES.txt or *_CHANGES.md files
+- ❌ Any automatic documentation of work done
+
+**Instead:** Just display output in terminal with echo/print. No files.
 
 ---
 

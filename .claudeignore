@@ -80,11 +80,19 @@ temp/
 tmp/
 
 # ============================
-# ESN CONSULTING - USER MANUALS (Exclude from agent context)
+# OPTIMIZATION REPORTS (Archive)
 # ============================
-# User-facing documentation (not for Claude prompting)
-esn_consulting/GUIDE_UTILISATION.md
-esn_consulting/LIVRABLE.md
-esn_consulting/METHODOLOGIE.md
+OPTIMIZATION_*.md
+*OPTIMIZATION*.txt
+CLAUDE_MD_VALIDATION_REPORT.md
 
-# PROMPT_FINAL.md is INCLUDED in context (validated template for reproducibility)
+# ============================
+# LEAN PRODUCTION STRATEGY
+# ============================
+# We do NOT generate user manuals (GUIDE_UTILISATION, LIVRABLE, METHODOLOGIE)
+# Only generate: README.md, PROMPT_FINAL.md, generate_budget.py, test_budget.py, Excel
+# These patterns are defensive in case legacy files exist:
+*/GUIDE_UTILISATION.md
+*/LIVRABLE.md
+*/METHODOLOGIE.md
+*/README_TECHNIQUE.md

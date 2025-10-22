@@ -119,8 +119,7 @@ finance_bp/
 │
 └── esn_consulting/
     ├── Budget_CA_2026_FINAL.xlsx          ← Fichier Excel validé
-    ├── generate_budget_enhanced.py        ← Générateur avec améliorations
-    ├── generate_budget.py                 ← Générateur de base
+    ├── generate_budget.py                 ← Générateur principal (version améliorée)
     ├── test_budget.py                     ← Tests automatisés
     ├── validate_budget.py                 ← Validation
     ├── show_summary.py                    ← Affichage résumé
@@ -272,7 +271,7 @@ Taux de réussite final : 100% (8/8 tests passés)
 ```bash
 cd finance_bp/
 mkdir saas/
-# Adapter generate_budget_enhanced.py pour SaaS
+# Adapter generate_budget.py pour SaaS
 # Créer test_budget.py spécifique SaaS
 # Documenter dans CLAUDE.md
 ```

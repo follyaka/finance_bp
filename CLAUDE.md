@@ -107,18 +107,6 @@ finance_bp/
 - Creates maintenance burden (keeping 3 docs in sync)
 - Information should be in README.md (concise) or METHODOLOGIE.md (detailed)
 
-❌ **sector/validate_budget.py** (Redundant Validator)
-- Reason: test_budget.py already does validation
-- Duplicate functionality = maintenance burden
-
-❌ **sector/show_summary.py** (Fancy Display)
-- Reason: Bloat "Mission Accomplished" script
-- Just displays fancy summary - adds no value
-
-❌ **sector/inspect_formulas.py** (Debug Tool)
-- Reason: Debug utility not needed in production
-- test_budget.py already validates formulas
-
 ### Standard Deliverable per Sector
 
 When user requests a new sector budget, generate ONLY:
@@ -130,6 +118,7 @@ sector/
 ├── METHODOLOGIE.md              ✅ Generate (business logic, decisions, formulas)
 ├── generate_budget.py           ✅ Generate (code)
 ├── test_budget.py               ✅ Generate (MANDATORY tests)
+├── inspect_formulas.py          ← Inspection formules
 └── Budget_[Sector]_FINAL.xlsx   ✅ Generate (final output)
 
 Total: 6 files (~4.5K tokens in context)
@@ -139,9 +128,6 @@ Total: 6 files (~4.5K tokens in context)
 - ❌ GUIDE_UTILISATION.md (user manual - Excel is self-explanatory)
 - ❌ LIVRABLE.md (delivery report - bloat marketing speak)
 - ❌ README_TECHNIQUE.md (redundant with README.md + METHODOLOGIE.md)
-- ❌ validate_budget.py (redundant with test_budget.py)
-- ❌ show_summary.py (bloat display script)
-- ❌ inspect_formulas.py (debug tool not needed in production)
 - ❌ Any other scripts or documentation files
 
 **Result:**
